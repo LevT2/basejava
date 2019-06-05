@@ -5,65 +5,67 @@ import java.util.Objects;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10_000];
 
     private int size;
 
-    void clear() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    void update(Resume r) {
-        int index = getIndex(r.uuid);
+    public void update(Resume resume) {
+        int index = getIndex(resume.uuid);
 
-        if (index >= 0) {
-            System.out.println("ERROR in method 'update' :" + r.uuid);
+        if (index == -1) {
+            System.out.println("ERROR in method 'update' :" + resume.uuid);
         } else {
-            storage[index] = r;
+            storage[index] = resume;
         }
     }
 
-    void save(Resume r) {
-        int index = getIndex(r.uuid);
+    public void save(Resume resume) {
+        int index = getIndex(resume.uuid);
 
-        if (index == 0) {
-            System.out.println("ERROR in method 'save' :" + r.uuid);
+        if (index >= 0) {
+            System.out.println("ERROR in method 'save' :" + resume.uuid);
         } else {
-            if (size < 10000) {
-                storage[size] = r;
+            if (size < storage.length) {
+                storage[size] = resume;
                 size++;
             } else {
-                System.out.println("ERROR in method 'save' :" + r.uuid + " (storage backing array boundary has reached)");
+                System.out.println("ERROR in method 'save' :" + resume.uuid + " (storage backing array boundary has been reached)");
             }
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         int index = getIndex(uuid);
 
         if (index >= 0) {
             return storage[index];
         } else {
+            System.out.println("Invalid uuid in method 'get': " + uuid);
             return null;
         }
     }
 
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         int index = getIndex(uuid);
 
         if (index >= 0) {
-//            System.arraycopy(storage, index + 1, storage, index, size - index - 1);
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
+        } else {
+            System.out.println("Invalid uuid in method 'delete': " + uuid);
         }
     }
 
 
     private int getIndex(String uuid) {
-        for (int i = 0; i < size; ++i) {
+        for (int i = 0; i < size; i++) {
             if (Objects.equals(storage[i].uuid, uuid)) {
                 return i;
             }
@@ -76,11 +78,11 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
 
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 }
