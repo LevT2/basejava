@@ -38,7 +38,7 @@ public class MainArray {
                     break;
                 case "update":
                     Resume rNew = new Resume();
-                    rNew.setUuid(ARRAY_STORAGE.get(uuid).getUuid());
+                    rNew.setUuid(uuid);
                     ARRAY_STORAGE.update(rNew);
                     break;
                 case "delete":
