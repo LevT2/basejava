@@ -3,6 +3,7 @@
  */
 public class MainTestArrayStorage {
     static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    static int ARRAY_STORAGE_LIMIT = 10_000;
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -14,17 +15,14 @@ public class MainTestArrayStorage {
         Resume r2new = new Resume();
         r2new.uuid = "uuid2";
 
-
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
-
 
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.uuid));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
-
 
         ARRAY_STORAGE.save(r2new);
 
@@ -34,9 +32,6 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.get("uuid111");
         ARRAY_STORAGE.delete("uuid111");
 
-
-
-
         printAll();
         ARRAY_STORAGE.delete(r1.uuid);
         printAll();
@@ -45,15 +40,13 @@ public class MainTestArrayStorage {
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
-        {
-            for (int i=1; i<=10001;i++){
-                Resume r = new Resume();
-                r.uuid = "uuid" + i;
-                ARRAY_STORAGE.save(r);
-            }
+        for (int i=0; i<=ARRAY_STORAGE_LIMIT; i++){
+            Resume r = new Resume();
+            r.uuid = "uuid" + i;
+            ARRAY_STORAGE.save(r);
         }
-        System.out.println("Size: " + ARRAY_STORAGE.size());
 
+        System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
     static void printAll() {
