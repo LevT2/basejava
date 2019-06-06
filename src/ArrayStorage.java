@@ -15,26 +15,26 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int index = getIndex(resume.uuid);
+        int index = getIndex(resume.getUuid());
 
-        if (index < 0) {
-            System.out.println("ERROR in method 'update' :" + resume.uuid);
-        } else {
+        if (index >= 0) {
             storage[index] = resume;
+        } else {
+            System.out.println("ERROR in method 'update' :" + resume.getUuid());
         }
     }
 
     public void save(Resume resume) {
-        int index = getIndex(resume.uuid);
+        int index = getIndex(resume.getUuid());
 
         if (index >= 0) {
-            System.out.println("ERROR in method 'save' :" + resume.uuid);
+            System.out.println("ERROR in method 'save' :" + resume.getUuid());
         } else {
             if (size < storage.length) {
                 storage[size] = resume;
                 size++;
             } else {
-                System.out.println("ERROR in method 'save' :" + resume.uuid + " (storage backing array boundary has been reached)");
+                System.out.println("ERROR in method 'save' :" + resume.getUuid() + " (storage backing array boundary has been reached)");
             }
         }
     }
@@ -76,7 +76,7 @@ public class ArrayStorage {
 
     private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (Objects.equals(storage[i].uuid, uuid)) {
+            if (Objects.equals(storage[i].getUuid(), uuid)) {
                 return i;
             }
         }
