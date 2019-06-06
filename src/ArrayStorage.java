@@ -17,7 +17,7 @@ public class ArrayStorage {
     public void update(Resume resume) {
         int index = getIndex(resume.uuid);
 
-        if (index == -1) {
+        if (index < 0) {
             System.out.println("ERROR in method 'update' :" + resume.uuid);
         } else {
             storage[index] = resume;
@@ -63,6 +63,16 @@ public class ArrayStorage {
         }
     }
 
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
+    }
+
+    public int size() {
+        return size;
+    }
 
     private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
@@ -71,18 +81,5 @@ public class ArrayStorage {
             }
         }
         return -1;
-    }
-
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    public int size() {
-        return size;
     }
 }
