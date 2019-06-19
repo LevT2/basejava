@@ -12,11 +12,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
 
     @Override
-    public void clear() {
-
-    }
-
-    @Override
     public void update(Resume r) {
 
     }
@@ -31,10 +26,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     }
 
-    @Override
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
+
 
     @Override
     protected int getIndex(String uuid) {
