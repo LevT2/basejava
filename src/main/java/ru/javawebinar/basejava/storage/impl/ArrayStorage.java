@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.AbstractArrayStorage;
 
-import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
@@ -18,7 +17,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         if (index < 0) {
             log.error("Resume {} not exist", resume.getUuid());
         } else {
-            insert(resume,size);
+            insertAt(resume,size);
         }
     }
 
@@ -28,7 +27,7 @@ public class ArrayStorage extends AbstractArrayStorage {
             if (size >= STORAGE_LIMIT) {
                 log.error("Storage overflow");
             } else {
-                insert(resume,index);
+                insertAt(resume,index);
                 size++;
             }
         } else {
@@ -36,7 +35,7 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    private void insert(Resume resume, int index) {
+    private void insertAt(Resume resume, int index) {
         storage[index] = resume;
     }
 

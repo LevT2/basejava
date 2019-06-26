@@ -1,13 +1,14 @@
 package ru.javawebinar.basejava.storage.impl;
 
+import org.junit.Test;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.Storage;
 
 /**
  * Test ru.javawebinar.basejava.storage.impl.ArrayStorage
  */
-public class SortedArrayStorageTest {
-    static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+public class ArrayStorageTest {
+    static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();

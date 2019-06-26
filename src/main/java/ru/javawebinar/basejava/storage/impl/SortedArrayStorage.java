@@ -6,7 +6,6 @@ import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.AbstractArrayStorage;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     protected final Logger log = LoggerFactory.getLogger(SortedArrayStorage.class);
@@ -18,7 +17,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         if (index < 0) {
             log.error("Resume {} does not exist", resume.getUuid());
         } else {
-            insert(resume, index);
+            insertAt(resume, index);
         }
     }
 
@@ -29,16 +28,16 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         }
         int index = Arrays.binarySearch(storage, 0, size, resume);
         if (index < 0) {
-            // this is a new value to insert (not a duplicate).
+            // this is a new value to insertAt (not a duplicate).
             index = - index - 1;
         } else {
             log.error("Resume {} already exist", resume.getUuid());
         }
-        insert(resume, index);
+        insertAt(resume, index);
         size++;
     }
 
-    private void insert(Resume resume, int index) {
+    private void insertAt(Resume resume, int index) {
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
     }
