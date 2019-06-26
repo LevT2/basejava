@@ -7,11 +7,6 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-
-    protected int getIndex(Resume resume) {
-        return Arrays.binarySearch(storage, 0, size, resume);
-    }
-
     @Override
     public void save(Resume resume) {
         int index = getIndex(resume);
@@ -20,25 +15,34 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             if (size == STORAGE_LIMIT) {
                 throw new IllegalStateException("Storage overflow.");
             } else {
+                size++;
                 index = -index - 1;
+                insertAt(resume, index);
+//                size++;
             }
         } else {
             log.error("Resume {} already exist", resume.getUuid());
         }
-        insertAt(resume, index);
-        size++;
     }
 
+    @Override
     protected void insertAt(Resume resume, int index) {
+        System.out.println("index: " + index);
+
+        //Если закомментировать эту строку, то все CRUD тесты проходит, но в массив помещается не больше 16 элементов
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
     }
 
-
+    @Override
     protected void fixAfterDelete(int index) {
-        System.arraycopy(storage, index+1, storage, index, size - index);
+        System.arraycopy(storage, index + 1, storage, index, size - index);
     }
 
+    @Override
+    protected int getIndex(Resume resume) {
+        return Arrays.binarySearch(storage, 0, size, resume);
+    }
 
     @Override
     protected int getIndex(String uuid) {

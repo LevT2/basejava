@@ -4,13 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.Storage;
-import ru.javawebinar.basejava.storage.impl.ArrayStorage;
-import ru.javawebinar.basejava.storage.impl.SortedArrayStorage;
-
-import java.util.Arrays;
-import java.util.Enumeration;
 
 import static org.junit.Assert.*;
+import static ru.javawebinar.basejava.storage.AbstractArrayStorage.STORAGE_LIMIT;
 
 public class ArrayStorageTest {
 
@@ -23,11 +19,8 @@ public class ArrayStorageTest {
         storage = new ArrayStorage();
     }
 
-    /**
-     * Resume the crud.
-     */
     @Test
-    public void Crud(){
+    public void Crud() {
         String newUuid = create();
         getById(newUuid);
         getAll();
@@ -35,8 +28,25 @@ public class ArrayStorageTest {
         delete(newUuid);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void Overflow(){
+        //Arrange
+        for (int i = 0; i <= STORAGE_LIMIT-1; i++) {
+            Resume r = new Resume();
+            r.setUuid("uuid" + i);
+            storage.save(r);
+        }
+
+        //Act
+        Resume r = new Resume();
+        r.setUuid("uuid" + STORAGE_LIMIT);
+        storage.save(r);
+    }
+
+
     /**
      * Creates this instance.
+     *
      * @return The id of the new record.
      */
     private String create() {
@@ -55,11 +65,12 @@ public class ArrayStorageTest {
 
     /**
      * Updates the specified id.
+     *
      * @param uuid The id.
      */
-    private void update (String uuid) {
+    private void update(String uuid) {
         //Arrange
-        Resume newResume  = new Resume();
+        Resume newResume = new Resume();
         newResume.setUuid(uuid);
 
         //Act
@@ -73,17 +84,18 @@ public class ArrayStorageTest {
     /**
      * Gets all.
      */
-    private void getAll(){
+    private void getAll() {
         //Act
         Resume[] items = storage.getAll();
 
         //Assert
-        assertTrue("getAll returned no items.",items.length > 0);
+        assertTrue("getAll returned no items.", items.length > 0);
         assertEquals(uuid, items[0].getUuid());
     }
 
     /**
      * Gets the by ID.
+     *
      * @param uuid The id of the resume.
      */
     private void getById(String uuid) {
@@ -97,6 +109,7 @@ public class ArrayStorageTest {
 
     /**
      * Deletes the specified ID.
+     *
      * @param uuid The id.
      */
     private void delete(String uuid) {

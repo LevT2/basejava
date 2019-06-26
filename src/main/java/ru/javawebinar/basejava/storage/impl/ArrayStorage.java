@@ -12,32 +12,35 @@ import ru.javawebinar.basejava.storage.AbstractArrayStorage;
 public class ArrayStorage extends AbstractArrayStorage {
     protected final Logger log = LoggerFactory.getLogger(ArrayStorage.class);
 
-
-    protected int getIndex(Resume resume) {
-        return getIndex(resume.getUuid());
-    }
-
     public void save(Resume resume) {
         int index = getIndex(resume);
         if (index < 0) {
             if (size >= STORAGE_LIMIT) {
-                log.error("Storage overflow");
+                throw new IllegalStateException("Storage overflow.");
+//                log.error("Storage overflow");
             } else {
-                insertAt(resume,size);
+                insertAt(resume, size);
                 size++;
             }
         } else {
-            log.error("Resume {} already exists", resume.getUuid());;
+            log.error("Resume {} already exists", resume.getUuid());
         }
     }
 
+    @Override
     protected void insertAt(Resume resume, int index) {
         storage[index] = resume;
     }
 
+    @Override
     protected void fixAfterDelete(int index) {
         storage[index] = storage[size - 1];
         storage[size - 1] = null;
+    }
+
+    @Override
+    protected int getIndex(Resume resume) {
+        return getIndex(resume.getUuid());
     }
 
     protected int getIndex(String uuid) {
