@@ -1,45 +1,110 @@
 package ru.javawebinar.basejava.storage.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.Storage;
+import ru.javawebinar.basejava.storage.impl.ArrayStorage;
+import ru.javawebinar.basejava.storage.impl.SortedArrayStorage;
 
-/**
- * Test ru.javawebinar.basejava.storage.impl.ArrayStorage
- */
+import java.util.Arrays;
+import java.util.Enumeration;
+
+import static org.junit.Assert.*;
+
 public class ArrayStorageTest {
-    static final Storage ARRAY_STORAGE = new ArrayStorage();
 
-    public static void main(String[] args) {
-        Resume r1 = new Resume();
-        r1.setUuid("uuid1");
-        Resume r2 = new Resume();
-        r2.setUuid("uuid2");
-        Resume r3 = new Resume();
-        r3.setUuid("uuid3");
+    private Storage storage;
 
-        ARRAY_STORAGE.save(r1);
-        ARRAY_STORAGE.save(r2);
-        ARRAY_STORAGE.save(r3);
+    private String uuid = "uuid";
 
-        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
-        System.out.println("Size: " + ARRAY_STORAGE.size());
-
-        System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
-
-        printAll();
-        ARRAY_STORAGE.delete(r1.getUuid());
-        printAll();
-        ARRAY_STORAGE.clear();
-        printAll();
-
-        System.out.println("Size: " + ARRAY_STORAGE.size());
+    @Before
+    public void setUp() throws Exception {
+        storage = new ArrayStorage();
     }
 
-    static void printAll() {
-        System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
-            System.out.println(r);
-        }
+    /**
+     * Resume the crud.
+     */
+    @Test
+    public void Crud(){
+        String newUuid = create();
+        getById(newUuid);
+        getAll();
+        update(newUuid);
+        delete(newUuid);
+    }
+
+    /**
+     * Creates this instance.
+     * @return The id of the new record.
+     */
+    private String create() {
+        //Arrange
+        Resume resume = new Resume();
+        resume.setUuid(uuid);
+
+        //Act
+        storage.save(resume);
+
+        //Assert
+        assertNotEquals("Creating new record does not return id", null, resume.getUuid());
+
+        return resume.getUuid();
+    }
+
+    /**
+     * Updates the specified id.
+     * @param uuid The id.
+     */
+    private void update (String uuid) {
+        //Arrange
+        Resume newResume  = new Resume();
+        newResume.setUuid(uuid);
+
+        //Act
+        storage.update(newResume);
+        Resume updated = storage.get(uuid);
+
+        //Assert
+        assertEquals("Updated object does not equal", updated, newResume);
+    }
+
+    /**
+     * Gets all.
+     */
+    private void getAll(){
+        //Act
+        Resume[] items = storage.getAll();
+
+        //Assert
+        assertTrue("getAll returned no items.",items.length > 0);
+        assertEquals(uuid, items[0].getUuid());
+    }
+
+    /**
+     * Gets the by ID.
+     * @param uuid The id of the resume.
+     */
+    private void getById(String uuid) {
+        //Act
+        Resume resume = storage.get(uuid);
+
+        //Assert
+        assertNotNull("getByID returned null.", resume);
+        assertEquals(uuid, resume.getUuid());
+    }
+
+    /**
+     * Deletes the specified ID.
+     * @param uuid The id.
+     */
+    private void delete(String uuid) {
+        //Act
+        storage.delete(uuid);
+        Resume resume = storage.get(uuid);
+
+        //Assert
+        assertNull("Record is not deleted.", resume);
     }
 }

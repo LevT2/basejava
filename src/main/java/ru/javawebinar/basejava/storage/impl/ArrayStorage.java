@@ -12,22 +12,18 @@ import ru.javawebinar.basejava.storage.AbstractArrayStorage;
 public class ArrayStorage extends AbstractArrayStorage {
     protected final Logger log = LoggerFactory.getLogger(ArrayStorage.class);
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            log.error("Resume {} not exist", resume.getUuid());
-        } else {
-            insertAt(resume,size);
-        }
+
+    protected int getIndex(Resume resume) {
+        return getIndex(resume.getUuid());
     }
 
     public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
+        int index = getIndex(resume);
         if (index < 0) {
             if (size >= STORAGE_LIMIT) {
                 log.error("Storage overflow");
             } else {
-                insertAt(resume,index);
+                insertAt(resume,size);
                 size++;
             }
         } else {
@@ -35,19 +31,13 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    private void insertAt(Resume resume, int index) {
+    protected void insertAt(Resume resume, int index) {
         storage[index] = resume;
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            log.error("Resume {} does not exist", uuid);
-        } else {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-        }
+    protected void fixAfterDelete(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
 
     protected int getIndex(String uuid) {
