@@ -6,9 +6,9 @@ import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.Storage;
 
 import static org.junit.Assert.*;
-import static ru.javawebinar.basejava.storage.AbstractArrayStorage.STORAGE_LIMIT;
 
 public class ArrayStorageTest {
+    protected static final int STORAGE_LIMIT = 10_000;
 
     private Storage storage;
 
@@ -28,10 +28,10 @@ public class ArrayStorageTest {
         delete(newUuid);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void Overflow(){
+    @Test
+    public void Overflow() {
         //Arrange
-        for (int i = 0; i <= STORAGE_LIMIT-1; i++) {
+        for (int i = 0; i <= STORAGE_LIMIT - 1; i++) {
             Resume r = new Resume();
             r.setUuid("uuid" + i);
             storage.save(r);

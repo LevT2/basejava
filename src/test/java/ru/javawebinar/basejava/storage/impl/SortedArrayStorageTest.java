@@ -9,6 +9,8 @@ import static org.junit.Assert.*;
 
 public class SortedArrayStorageTest {
 
+    protected static final int STORAGE_LIMIT = 10_000;
+
     private Storage storage;
 
     private String uuid = "uuid";
@@ -26,6 +28,22 @@ public class SortedArrayStorageTest {
         update(newUuid);
         delete(newUuid);
     }
+
+    @Test
+    public void Overflow() {
+        //Arrange
+        for (int i = 0; i <= STORAGE_LIMIT - 1; i++) {
+            Resume r = new Resume();
+            r.setUuid("uuid" + String.format("%05d", i));
+            storage.save(r);
+        }
+
+        //Act
+        Resume r = new Resume();
+        r.setUuid("uuid" + STORAGE_LIMIT);
+        storage.save(r);
+    }
+
 
     /**
      * Creates this instance.

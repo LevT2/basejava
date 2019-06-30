@@ -13,13 +13,12 @@ public class ArrayStorage extends AbstractArrayStorage {
     protected final Logger log = LoggerFactory.getLogger(ArrayStorage.class);
 
     public void save(Resume resume) {
-        int index = getIndex(resume);
+        int index = getIndex(resume.getUuid());
         if (index < 0) {
             if (size >= STORAGE_LIMIT) {
-                throw new IllegalStateException("Storage overflow.");
-//                log.error("Storage overflow");
+                log.error("Storage overflow at :" + size);
             } else {
-                insertAt(resume, size);
+                doSave(resume, size);
                 size++;
             }
         } else {
@@ -28,21 +27,17 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertAt(Resume resume, int index) {
+    protected void doSave(Resume resume, int index) {
         storage[index] = resume;
     }
 
     @Override
-    protected void fixAfterDelete(int index) {
+    protected void doDelete(int index) {
         storage[index] = storage[size - 1];
         storage[size - 1] = null;
     }
 
     @Override
-    protected int getIndex(Resume resume) {
-        return getIndex(resume.getUuid());
-    }
-
     protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {

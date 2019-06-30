@@ -9,16 +9,16 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void save(Resume resume) {
-        int index = getIndex(resume);
+        int index = getIndex(resume.getUuid());
+
         if (index < 0) {
-            // this is a new value to insertAt (not a duplicate).
+            // this is a new value to doSave (not a duplicate).
             if (size == STORAGE_LIMIT) {
-                throw new IllegalStateException("Storage overflow.");
+                log.error("Storage overflow at :" + size);
             } else {
-                size++;
                 index = -index - 1;
-                insertAt(resume, index);
-//                size++;
+                doSave(resume, index);
+                size++;
             }
         } else {
             log.error("Resume {} already exist", resume.getUuid());
@@ -26,28 +26,20 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertAt(Resume resume, int index) {
-        System.out.println("index: " + index);
-
-        //Если закомментировать эту строку, то все CRUD тесты проходит, но в массив помещается не больше 16 элементов
-        System.arraycopy(storage, index, storage, index + 1, size - index);
+    protected void doSave(Resume resume, int index) {
         storage[index] = resume;
     }
 
     @Override
-    protected void fixAfterDelete(int index) {
+    protected void doDelete(int index) {
         System.arraycopy(storage, index + 1, storage, index, size - index);
-    }
-
-    @Override
-    protected int getIndex(Resume resume) {
-        return Arrays.binarySearch(storage, 0, size, resume);
     }
 
     @Override
     protected int getIndex(String uuid) {
         Resume resume = new Resume();
         resume.setUuid(uuid);
-        return getIndex(resume);
+        if (size == 0) return -1;
+        return Arrays.binarySearch(storage, 0, size, resume);
     }
 }

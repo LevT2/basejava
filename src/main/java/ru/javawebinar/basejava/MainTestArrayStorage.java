@@ -59,7 +59,6 @@ public class MainTestArrayStorage {
             }
         } catch (NullPointerException ex) {
             System.out.println("<--NPE at size: " + ARRAY_STORAGE.size());
-            System.out.println("<---" + ARRAY_STORAGE.size());
         }
 
         Resume r = new Resume();

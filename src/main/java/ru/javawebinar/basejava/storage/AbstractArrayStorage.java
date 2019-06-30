@@ -10,10 +10,10 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage implements Storage {
-    public static final int STORAGE_LIMIT = 10_000;
+    protected static final int STORAGE_LIMIT = 10_000;
     protected final Logger log = LoggerFactory.getLogger(AbstractArrayStorage.class);
 
-    protected Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
     public int size() {
@@ -33,16 +33,18 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = getIndex(uuid);
         if (index < 0) {
             return null;
+        } else {
+            log.error("Resume with id {} does not exist", uuid);
         }
         return storage[index];
     }
 
     public void update(Resume resume) {
-        int index = getIndex(resume);
+        int index = getIndex(resume.getUuid());
         if (index < 0) {
             log.error("Resume {} does not exist", resume.getUuid());
         } else {
-            insertAt(resume, index);
+            storage[index] = resume;
         }
     }
 
@@ -51,16 +53,16 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             log.error("Resume {} does not exist", uuid);
         } else {
-            fixAfterDelete(index);
+            doDelete(index);
             size--;
         }
     }
 
-    protected abstract void insertAt(Resume resume, int index);
+    protected abstract void doSave(Resume resume, int index);
 
-    protected abstract void fixAfterDelete(int index);
+    protected abstract void doDelete(int index);
 
-    protected abstract int getIndex(Resume resume);
+//    protected abstract int getIndex(Resume resume);
 
     protected abstract int getIndex(String uuid);
 }
