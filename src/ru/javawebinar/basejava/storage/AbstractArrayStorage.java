@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.storage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -11,7 +9,6 @@ import java.util.Arrays;
  */
 public abstract class AbstractArrayStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10_000;
-    protected final Logger log = LoggerFactory.getLogger(AbstractArrayStorage.class);
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -29,20 +26,33 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
+    public void save(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index < 0) {
+            if (size >= STORAGE_LIMIT) {
+                System.out.println("Storage overflow at :" + size);
+            } else {
+                doSave(resume, index);
+            }
+        } else {
+            System.out.println("Resume already exists with id :" + resume.getUuid());
+        }
+    }
+
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
+            System.out.println("No such Resume with id : " +  uuid);
             return null;
         } else {
-            log.error("Resume with id {} does not exist", uuid);
+            return storage[index];
         }
-        return storage[index];
     }
 
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            log.error("Resume {} does not exist", resume.getUuid());
+            System.out.println("No such Resume with id : " + resume.getUuid());
         } else {
             storage[index] = resume;
         }
@@ -51,7 +61,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            log.error("Resume {} does not exist", uuid);
+            System.out.println("No such Resume with id : " +  uuid);
         } else {
             doDelete(index);
             size--;
@@ -61,8 +71,6 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract void doSave(Resume resume, int index);
 
     protected abstract void doDelete(int index);
-
-//    protected abstract int getIndex(Resume resume);
 
     protected abstract int getIndex(String uuid);
 }
