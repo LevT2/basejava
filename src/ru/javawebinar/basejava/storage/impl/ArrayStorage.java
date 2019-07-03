@@ -3,7 +3,6 @@ package ru.javawebinar.basejava.storage.impl;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.AbstractArrayStorage;
 
-
 /**
  * Array based storage for Resumes
  */
