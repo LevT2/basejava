@@ -9,12 +9,12 @@ import ru.javawebinar.basejava.storage.AbstractArrayStorage;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void fillDeletedElement(int index) {
+    protected void doDelete(int index) {
         storage[index] = storage[size - 1];
     }
 
     @Override
-    protected void insertElement(Resume r, int index) {
+    protected void doSave(Resume r, int index) {
         storage[size] = r;
     }
 

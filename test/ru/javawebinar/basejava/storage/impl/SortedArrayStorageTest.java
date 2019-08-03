@@ -1,20 +1,10 @@
 package ru.javawebinar.basejava.storage.impl;
 
-import org.junit.Test;
+import ru.javawebinar.basejava.storage.AbstractArrayStorageTest;
 
-import static org.junit.Assert.*;
+public class SortedArrayStorageTest extends AbstractArrayStorageTest {
 
-public class SortedArrayStorageTest {
-
-    @Test
-    public void fillDeletedElement() {
-    }
-
-    @Test
-    public void insertElement() {
-    }
-
-    @Test
-    public void getIndex() {
+    public SortedArrayStorageTest() {
+        super(new SortedArrayStorage());
     }
 }
