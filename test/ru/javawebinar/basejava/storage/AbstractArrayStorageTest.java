@@ -7,30 +7,29 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Optional;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.javawebinar.basejava.storage.Util.*;
 
 
-@DisplayName("JUnit 5 Example")
 public abstract class AbstractArrayStorageTest {
-    protected Storage storage;
 
-    protected static final String UUID_1 = "uuid1";
-    protected static final String UUID_2 = "uuid2";
-    protected static final String UUID_3 = "uuid3";
+    private Storage storage;
 
-    public AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
+    }
+
+    @BeforeAll
+    static void beforeAll() {
     }
 
     @BeforeEach
     void beforeEach() {
-        storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
-        storage.save(new Resume(UUID_3));
+        storage.save(r1);
+        storage.save(r2);
+        storage.save(r3);
     }
 
     @AfterEach
@@ -39,8 +38,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Nested
-    @DisplayName("When overflow")
-    class WhenOverflow {
+    class SaveOverflow {
 
         @BeforeEach
         void setUp() {
@@ -96,26 +94,33 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume r2new = new Resume(UUID_2);
-
+        Resume r2new = makeResume(UUID_2);
         storage.update(r2new);
-        assertEquals(UUID_2, storage.get(UUID_2).getUuid());
+
+        assertSame(storage.get(UUID_2), r2new);
     }
 
     @Test
+    public void updateNonExisting() {
+        assertThrows(
+                NotExistStorageException.class,
+                () -> {
+                    storage.update(makeResume("dummy"));
+                }
+        );
+    }
+
+
+    @Test
     public void getAll() throws Exception {
-
-        Resume[] all = storage.getAll();
-
-        assertEquals(UUID_1, all[0].getUuid());
-        assertEquals(UUID_2, all[1].getUuid());
-        assertEquals(UUID_3, all[2].getUuid());
+        Resume[] test = new Resume[]{r1, r2, r3};
+        assertArrayEquals(test, storage.getAll());
     }
 
     @Test
     public void save() throws Exception {
-        String newUuid = "uuid4";
-        Resume r4 = new Resume(newUuid);
+        String newUuid = UUID_4;
+        Resume r4 = makeResume(newUuid);
 
         storage.save(r4);
         assertEquals(newUuid, storage.get(newUuid).getUuid());
@@ -130,29 +135,36 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void delete() throws Exception {
         storage.delete(UUID_2);
-        Resume[] all = storage.getAll();
-        Optional<Resume> first = Stream.of(all)
-                .filter(r -> r.getUuid() == UUID_2)
-                .findFirst();
 
-        assertEquals(Optional.empty(), first);
+        assertAll("storage size is decreased, and access to deleted item correctly throws",
+                () -> assertEquals(2, storage.size()),
+                () -> assertThrows(NotExistStorageException.class,
+                        () -> storage.get(UUID_2))
+        );
+    }
+
+    @Test
+    public void deleteNonExisting() {
+        assertThrows(
+                NotExistStorageException.class,
+                () -> {
+                    storage.delete("dummy");
+                }
+        );
     }
 
     @Test
     public void get() throws Exception {
-        assertEquals(UUID_1, storage.get("uuid1").getUuid());
+        assertSame(r1, storage.get(UUID_1));
     }
 
     @Test
     public void getNonExisting() {
-        String dummy = "dummy";
-
-        final StorageException thrown = assertThrows(
+        assertThrows(
                 NotExistStorageException.class,
                 () -> {
-                    storage.get(dummy);
+                    storage.get("dummy");
                 }
         );
-        assertEquals(dummy, thrown.getUuid());
     }
 }
