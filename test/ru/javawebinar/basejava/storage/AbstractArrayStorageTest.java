@@ -43,29 +43,12 @@ public abstract class AbstractArrayStorageTest {
         @BeforeEach
         void setUp() {
             storage.clear();
-
-            IntStream.iterate(0, n -> n + 1).
-                    limit(AbstractArrayStorage.STORAGE_LIMIT).
-                    mapToObj(i -> new Resume("Name" + i)).
-                    forEach(storage::save);
         }
 
 
         @Test
-        @DisplayName("Should not throw within size limit")
-        void shouldNotThrow() {
-            String uuid = "New item";
-            if (storage.size() < AbstractArrayStorage.STORAGE_LIMIT) {
-                storage.save(new Resume(uuid));
-                assertDoesNotThrow(() -> {
-                });
-            }
-        }
-
-        @Test
-        @DisplayName("Should throw correct exception if overflown")
-        void shouldThrowCorrectException() {
-
+        @DisplayName("Should not throw within size limit, then throws when overflow")
+        void fill() {
             // arrange
             String uuid = "New item";
             Executable throwingExecutable = () -> {
@@ -73,6 +56,13 @@ public abstract class AbstractArrayStorageTest {
             };
 
             // act and assert
+            assertDoesNotThrow(() -> {
+                IntStream.iterate(0, n -> n + 1).
+                        limit(AbstractArrayStorage.STORAGE_LIMIT).
+                        mapToObj(i -> new Resume("Name" + i)).
+                        forEach(storage::save);
+            });
+
             RuntimeException thrown = assertThrows(
                     StorageException.class, throwingExecutable::execute, "Should throw non specialized StorageException"
             );
