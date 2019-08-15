@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.storage.impl;
 import org.junit.jupiter.api.DisplayName;
 import ru.javawebinar.basejava.storage.AbstractArrayStorageTest;
 
-@DisplayName("Test ArrayStorage implementation")
+@DisplayName("ArrayStorage implementation")
 public class ArrayStorageTest extends AbstractArrayStorageTest {
 
     public ArrayStorageTest() {
