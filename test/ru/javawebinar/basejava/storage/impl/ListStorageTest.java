@@ -14,4 +14,8 @@ class ListStorageTest extends AbstractStorageTest{
     {
         super(new ListStorage());
     }
+//
+//    protected void assertSize(int size) {
+//        assertEquals(size, storage.size());
+//    }
 }

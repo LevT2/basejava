@@ -18,8 +18,6 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract List<Resume> toList();
-
     @Override
     public void save(Resume r) {
         int index = getNotExistingKey(r.getUuid());
@@ -42,11 +40,6 @@ public abstract class AbstractStorage implements Storage {
     public Resume get(String uuid) {
         int index = getExistingKey(uuid);
         return doGet(index);
-    }
-
-    @Override
-    public List<Resume> getAll(){
-        return toList();
     }
 
     protected int getExistingKey(String uuid) {

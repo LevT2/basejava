@@ -13,12 +13,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.javawebinar.basejava.storage.Util.*;
 
-public class AbstractStorageTest {
+public abstract class AbstractStorageTest {
     protected Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
+
+//    protected abstract void assertSize(int size);
+
 
     @BeforeEach
     void beforeEach() {
@@ -66,7 +69,7 @@ public class AbstractStorageTest {
         Resume r4 = new Resume(UUID_4);
         storage.save(r4);
 
-        assertEquals(4, storage.getAll().size());
+        assertSize(4);
         assertSame(r4, storage.get(UUID_4));
     }
 
@@ -97,13 +100,13 @@ public class AbstractStorageTest {
     }
 
 
-
     @Test
     void getAll() throws Exception {
-        List<Resume> test = Arrays.asList(R1, R2, R3);
-        assertEquals(3, storage.getAll().size());
-        assertEquals(test, storage.getAll());
+        Resume[] test = new Resume[]{R1, R2, R3};
+        assertEquals(3, storage.getAll().length);
+        assertArrayEquals(test, storage.getAll());
     }
+
 
     @Test
     void get() throws Exception {
@@ -118,11 +121,12 @@ public class AbstractStorageTest {
         );
     }
 
-    private void assertGet(Resume r) {
-        assertEquals(r, storage.get(r.getUuid()));
+
+    protected void assertSize(int size) {
+        assertEquals(size, storage.size());
     }
 
-    private void assertSize(int size) {
-        assertEquals(size, storage.size());
+    private void assertGet(Resume r) {
+        assertEquals(r, storage.get(r.getUuid()));
     }
 }

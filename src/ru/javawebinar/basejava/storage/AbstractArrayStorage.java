@@ -44,11 +44,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public List<Resume> toList() {
-        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     public void doSave(int index, Resume r) {

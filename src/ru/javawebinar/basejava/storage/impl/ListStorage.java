@@ -42,13 +42,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected List<Resume> toList() {
-        return list;
+    public void clear() {
+        list.clear();
     }
 
     @Override
-    public void clear() {
-        list.clear();
+    public Resume[] getAll() {
+        return list.toArray(Resume[]::new);
     }
 
     @Override
