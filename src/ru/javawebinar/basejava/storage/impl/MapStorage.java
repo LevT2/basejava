@@ -3,60 +3,58 @@ package ru.javawebinar.basejava.storage.impl;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.AbstractStorage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ListStorage extends AbstractStorage {
+public class MapStorage extends AbstractStorage {
 
-    private List<Resume> list = new ArrayList<>();
+    private Map<String, Resume> map = new HashMap<>();
+
 
     @Override
     protected void doSave(Object index, Resume r) {
-        list.add(r);
+        map.put((String)index,r);
     }
 
     @Override
     protected void doUpdate(Object index, Resume r) {
-        list.set((int) index, r);
+        map.put((String)index,r);
     }
 
     @Override
     protected Resume doGet(Object index) {
-        return list.get((int) index);
+        return map.get(index);
     }
 
     @Override
     protected void doDelete(Object index) {
-        list.remove(((int) index));
+        map.remove(index);
     }
 
     @Override
     protected Object getIndex(String uuid) {
-        for (int i = 0; i < list.size(); i++) {
-            if (uuid.equals(list.get(i).getUuid())) {
-                return i;
-            }
-        }
-        return null;
+        return uuid;
     }
 
     @Override
     protected boolean isPresent(Object index) {
-        return index != null;
+        return map.containsKey(index);
     }
 
     @Override
     public void clear() {
-        list.clear();
+        map.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return list.toArray(Resume[]::new);
+        return map.values().stream()
+                .sorted(Resume::compareTo)
+                .toArray(Resume[]::new);
     }
 
     @Override
     public int size() {
-        return list.size();
+        return map.size();
     }
 }

@@ -7,9 +7,6 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.javawebinar.basejava.storage.Util.*;
 
@@ -19,9 +16,6 @@ public abstract class AbstractStorageTest {
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
-
-//    protected abstract void assertSize(int size);
-
 
     @BeforeEach
     void beforeEach() {

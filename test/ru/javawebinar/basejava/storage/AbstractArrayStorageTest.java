@@ -38,15 +38,13 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
             };
 
             // act and assert
-            assertDoesNotThrow(() -> {
-                IntStream.iterate(0, n -> n + 1).
-                        limit(AbstractArrayStorage.STORAGE_LIMIT).
-                        mapToObj(i -> new Resume("Name" + i)).
-                        forEach(storage::save);
-            });
+            assertDoesNotThrow(() -> IntStream.iterate(0, n -> n + 1).
+                    limit(AbstractArrayStorage.STORAGE_LIMIT).
+                    mapToObj(i -> new Resume("Name" + i)).
+                    forEach(storage::save));
 
             RuntimeException thrown = assertThrows(
-                    StorageException.class, throwingExecutable::execute, "Should throw generic StorageException"
+                    StorageException.class, throwingExecutable, "Should throw generic StorageException"
             );
 
             assertEquals("Storage overflow", thrown.getMessage());

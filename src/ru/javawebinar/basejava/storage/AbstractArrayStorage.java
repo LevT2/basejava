@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Array based storage for Resumes
@@ -19,42 +18,53 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void implSave(int index, Resume r);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getIndex(String uuid);
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void doUpdate(int index, Resume r) {
-        storage[index] = r;
+    @Override
+    public void doUpdate(Object index, Resume r) {
+        storage[(Integer)index] = r;
     }
 
-    public Resume doGet(int index) {
-        return storage[index];
+    @Override
+    public Resume doGet(Object index) {
+        return storage[(Integer)index];
     }
 
-    public void doDelete(int index) {
-        implDelete(index);
+    @Override
+    public void doDelete(Object index) {
+        implDelete((Integer)index);
         storage[size - 1] = null;
         size--;
     }
 
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    public void doSave(int index, Resume r) {
+    @Override
+    public void doSave(Object index, Resume r) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
-            implSave(index, r);
+            implSave((Integer)index, r);
             size++;
         }
     }
 
+    @Override
+    public boolean isPresent(Object index) {
+        return (Integer) index >= 0;
+    }
 }
