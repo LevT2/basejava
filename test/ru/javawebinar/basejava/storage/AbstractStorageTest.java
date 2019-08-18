@@ -19,6 +19,7 @@ public abstract class AbstractStorageTest {
 
     @BeforeEach
     void beforeEach() {
+        storage.clear();
         storage.save(R1);
         storage.save(R2);
         storage.save(R3);
