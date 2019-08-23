@@ -11,10 +11,17 @@ class Util {
     static final Resume R1;
     static final Resume R2;
     static final Resume R3;
+    static final Resume R4;
 
     static {
         R1 = new Resume(UUID_1);
         R2 = new Resume(UUID_2);
         R3 = new Resume(UUID_3);
+        R4 = new Resume(UUID_3);
+
+//        R1 = new Resume(UUID_1, "Name1");
+//        R2 = new Resume(UUID_2, "Name2");
+//        R3 = new Resume(UUID_3, "Name3");
+//        R4 = new Resume(UUID_3, "Name4");
     }
 }

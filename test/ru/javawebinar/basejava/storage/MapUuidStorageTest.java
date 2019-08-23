@@ -18,12 +18,12 @@ public class MapUuidStorageTest extends AbstractStorageTest {
         super(new MapUuidStorage());
     }
 
-    @Test
-    void getAll() throws Exception {
-        Resume[] test = new Resume[]{R1, R2, R3};
-        Resume[] all = storage.getAll();
-        Arrays.sort(all);
-        assertEquals(3, all.length);
-        assertArrayEquals(test, all);
-    }
+//    @Test
+//    void getAll() throws Exception {
+//        Resume[] test = new Resume[]{R1, R2, R3};
+//        Resume[] all = storage.getAll();
+//        Arrays.sort(all);
+//        assertEquals(3, all.length);
+//        assertArrayEquals(test, all);
+//    }
 }

@@ -5,7 +5,9 @@ import ru.javawebinar.basejava.storage.AbstractStorage;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 // TODO implement
 // TODO create new MapStorage with search key not uuid
@@ -47,12 +49,18 @@ public class MapUuidStorage extends AbstractStorage {
         map.clear();
     }
 
+//    @Override
+//    public Resume[] getAll() {
+//        Collection<Resume> values = map.values();
+//        return values.toArray(new Resume[map.size()]);
+//    }
+
+
     @Override
-    public Resume[] getAll() {
-        Collection<Resume> values = map.values();
-        return values.toArray(new Resume[map.size()]);
-//        Resume[] objects = values.toArray(new Resume[0]);
-//        return objects;
+    public List<Resume> getAllSorted() {
+        return map.values().stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @Override
