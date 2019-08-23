@@ -6,55 +6,51 @@ import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected abstract void doSave(Object index, Resume r);
+    protected abstract Object getSearchKey(String uuid);
 
-    protected abstract void doUpdate(Object index, Resume r);
+    protected abstract void doUpdate(Resume r, Object searchKey);
 
-    protected abstract Resume doGet(Object index);
+    protected abstract boolean isExist(Object searchKey);
 
-    protected abstract void doDelete(Object index);
+    protected abstract void doSave(Resume r, Object searchKey);
 
-    protected abstract Object getIndex(String uuid);
+    protected abstract Resume doGet(Object searchKey);
 
-    protected abstract boolean isPresent(Object index);
+    protected abstract void doDelete(Object searchKey);
 
-    @Override
-    public void save(Resume r) {
-        Object index = getNotExistingKey(r.getUuid());
-        doSave(index, r);
-    }
-
-    @Override
     public void update(Resume r) {
-        Object index = getExistingKey(r.getUuid());
-        doUpdate(index, r);
+        Object searchKey = getExistedSearchKey(r.getUuid());
+        doUpdate(r, searchKey);
     }
 
-    @Override
+    public void save(Resume r) {
+        Object searchKey = getNotExistedSearchKey(r.getUuid());
+        doSave(r, searchKey);
+    }
+
     public void delete(String uuid) {
-        Object index = getExistingKey(uuid);
-        doDelete(index);
+        Object searchKey = getExistedSearchKey(uuid);
+        doDelete(searchKey);
     }
 
-    @Override
     public Resume get(String uuid) {
-        Object index = getExistingKey(uuid);
-        return doGet(index);
+        Object searchKey = getExistedSearchKey(uuid);
+        return doGet(searchKey);
     }
 
-    protected Object getExistingKey(String uuid) {
-        Object index = getIndex(uuid);
-        if (!isPresent(index)) {
+    private Object getExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return index;
+        return searchKey;
     }
 
-    protected Object getNotExistingKey(String uuid) {
-        Object index = getIndex(uuid);
-        if (isPresent(index)) {
+    private Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
-        return index;
+        return searchKey;
     }
 }
