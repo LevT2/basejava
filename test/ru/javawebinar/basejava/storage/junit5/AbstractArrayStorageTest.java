@@ -1,4 +1,4 @@
-package ru.javawebinar.basejava.storage;
+package ru.javawebinar.basejava.storage.junit5;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.Storage;
 
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.javawebinar.basejava.storage.Util.STORAGE_LIMIT;
 
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
@@ -34,13 +36,13 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
             // arrange
             String uuid = "New item";
             Executable throwingExecutable = () -> {
-                storage.save(new Resume(uuid));
+                storage.save(new Resume(uuid, "Extra soldier"));
             };
 
             // act and assert
             assertDoesNotThrow(() -> IntStream.iterate(0, n -> n + 1).
-                    limit(AbstractArrayStorage.STORAGE_LIMIT).
-                    mapToObj(i -> new Resume("Name" + i)).
+                    limit(STORAGE_LIMIT).
+                    mapToObj(i -> new Resume("Name" + i, "Name" + i)).
                     forEach(storage::save));
 
             RuntimeException thrown = assertThrows(
