@@ -1,11 +1,11 @@
-package ru.javawebinar.basejava.storage;
+package ru.javawebinar.basejava.storage.junit5;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.Storage;
 
 import java.util.Arrays;
 
@@ -27,11 +27,6 @@ public abstract class AbstractStorageTest {
         storage.save(R3);
     }
 
-    @AfterEach
-    void afterEach() {
-        storage.clear();
-    }
-
     @Test
     void size() throws Exception {
         assertSize(3);
@@ -46,10 +41,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     void update() throws Exception {
-        Resume r2New = new Resume(UUID_2);
+        Resume r2New = new Resume(UUID_2, "New Name");
         storage.update(r2New);
 
-        assertEquals(r2New, storage.get(UUID_2));
+        assertEquals(r2New, storage.get(R2.getUuid()));
 //        assertSame(r2New, storage.get(UUID_2));
     }
 
@@ -58,17 +53,16 @@ public abstract class AbstractStorageTest {
     void updateNonExisting() {
         assertThrows(
                 NotExistStorageException.class,
-                () -> storage.update(new Resume("dummy"))
+                () -> storage.update(FAKE)
         );
     }
 
     @Test
     void save() throws Exception {
-        Resume r4 = new Resume(UUID_4);
-        storage.save(r4);
+        storage.save(R4);
 
         assertSize(4);
-        assertSame(r4, storage.get(UUID_4));
+        assertSame(R4, storage.get(UUID_4));
     }
 
 
@@ -93,14 +87,14 @@ public abstract class AbstractStorageTest {
     void deleteNonExisting() {
         assertThrows(
                 NotExistStorageException.class,
-                () -> storage.delete("dummy")
+                () -> storage.delete(FAKE.getUuid())
         );
     }
 
 
     @Test
     void getAllSorted() throws Exception {
-        assertEquals(Arrays.asList(R1,R2,R3), storage.getAllSorted());
+        assertEquals(Arrays.asList(R1, R2, R3), storage.getAllSorted());
         assertSize(3);
     }
 
@@ -118,10 +112,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    void getNonExisting() {
+    void getNonExistinging() {
         assertThrows(
                 NotExistStorageException.class,
-                () -> storage.get("dummy")
+                () -> storage.get(FAKE.getUuid())
         );
     }
 

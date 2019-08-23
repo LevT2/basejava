@@ -3,45 +3,43 @@ package ru.javawebinar.basejava.storage.impl;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.AbstractStorage;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// TODO implement
-// TODO create new MapStorage with search key not uuid
-public class MapUuidStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
     private Map<String, Resume> map = new HashMap<>();
 
     @Override
-    protected String getSearchKey(String uuid) {
-        return uuid;
+    protected Object getSearchKey(String uuid) {
+        return map.get(uuid);
     }
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
-        map.put((String) searchKey, r);
+        map.put(r.getUuid(), r);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return map.containsKey(searchKey);
+        return searchKey != null;
     }
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
-        map.put((String) searchKey, r);
+        map.put(r.getUuid(), r);
     }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return map.get(searchKey);
+        return map.get(getUuid(searchKey));
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        map.remove(searchKey);
+        map.remove(getUuid(searchKey));
     }
 
     @Override
@@ -49,16 +47,19 @@ public class MapUuidStorage extends AbstractStorage {
         map.clear();
     }
 
-
-    @Override
-    public List<Resume> getAllSorted() {
-        return map.values().stream()
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
     @Override
     public int size() {
         return map.size();
+    }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        return new ArrayList<>(map.values().stream()
+                .sorted()
+                .collect(Collectors.toList()));
+    }
+
+    private String getUuid(Object searchKey) {
+        return ((Resume) searchKey).getUuid();
     }
 }
