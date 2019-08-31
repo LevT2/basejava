@@ -13,10 +13,8 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 import static ru.javawebinar.basejava.storage.Util.*;
 
-public class AbstractStorageTest {
+public abstract class AbstractStorageTest {
     protected Storage storage;
-
-//    public AbstractStorageTest(){}
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -38,8 +36,9 @@ public class AbstractStorageTest {
 
     @Test
     public void update() {
-        storage.update(new Resume(UUID_2, "New Name"));
-        assertEquals(R2, storage.get(R2.getUuid()));
+        Resume r2New = new Resume(UUID_2, "New Name");
+        storage.update(r2New);
+        assertEquals(r2New, storage.get(R2.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -91,8 +90,8 @@ public class AbstractStorageTest {
         assertEquals(size, storage.size());
     }
 
-    private void assertGet(Resume r) {
-        assertEquals(r, storage.get(r.getUuid()));
+    private void assertGet(Resume resume) {
+        assertEquals(resume, storage.get(resume.getUuid()));
     }
 
 }

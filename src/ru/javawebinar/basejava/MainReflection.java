@@ -9,22 +9,22 @@ import java.lang.reflect.Method;
 public class MainReflection {
 
     public static void main(String[] args) throws IllegalAccessException {
-        Resume r = new Resume("New Person");
-        Field field = r.getClass().getDeclaredFields()[0];
+        Resume resume = new Resume("New Person");
+        Field field = resume.getClass().getDeclaredFields()[0];
         field.setAccessible(true);
         System.out.println(field.getName());
-        System.out.println(field.get(r));
-        field.set(r, "new_uuid");
-        // TODO : invoke r.toString via reflection
-        System.out.println(r);
+        System.out.println(field.get(resume));
+        field.set(resume, "new_uuid");
+        // TODO : invoke resume.toString via reflection
+        System.out.println(resume);
 
-        System.out.println(field.get(r));
+        System.out.println(field.get(resume));
 
         try {
-            Method toString = r.getClass().getMethod("toString");
+            Method toString = resume.getClass().getMethod("toString");
 
             try {
-                Object invoke = toString.invoke(r);
+                Object invoke = toString.invoke(resume);
                 System.out.println(invoke);
 
             } catch (IllegalArgumentException e) {  }

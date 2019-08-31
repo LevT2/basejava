@@ -3,10 +3,7 @@ package ru.javawebinar.basejava.storage.impl;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.AbstractStorage;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MapUuidStorage extends AbstractStorage {
@@ -18,8 +15,8 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        map.put((String) searchKey, r);
+    protected void doUpdate(Resume resume, Object searchKey) {
+        map.put((String) searchKey, resume);
     }
 
     @Override
@@ -28,8 +25,8 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
-        map.put((String) searchKey, r);
+    protected void doSave(Resume resume, Object searchKey) {
+        map.put((String) searchKey, resume);
     }
 
     @Override
@@ -49,10 +46,8 @@ public class MapUuidStorage extends AbstractStorage {
 
 
     @Override
-    public List<Resume> getAllSorted() {
-        return map.values().stream()
-                .sorted()
-                .collect(Collectors.toList());
+    public List<Resume> doCopyAll() {
+        return new ArrayList<>(map.values());
     }
 
     @Override
