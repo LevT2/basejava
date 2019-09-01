@@ -4,8 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import ru.javawebinar.basejava.storage.impl.MapResumeStorage;
 
 @DisplayName("MapResumeStorage implementation")
-public class MapResumeStorageTest extends AbstractStorageTest {
-    public MapResumeStorageTest() {
+public class MapResumeStorageTest5 extends AbstractStorageTest5 {
+    public MapResumeStorageTest5() {
         super(new MapResumeStorage());
     }
 }

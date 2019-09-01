@@ -10,7 +10,7 @@ import ru.javawebinar.basejava.storage.Storage;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static ru.javawebinar.basejava.storage.Util.*;
 
 public abstract class AbstractStorageTest {
@@ -55,7 +55,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void save() throws Exception {
         storage.save(R4);
-        Assert.assertTrue(storage.getAllSorted().contains(R4));
+        assertGet(R4);
         assertSize(4);
     }
 
@@ -64,16 +64,16 @@ public abstract class AbstractStorageTest {
         storage.save(R1);
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
         storage.delete(R2.getUuid());
-        Assert.assertFalse(storage.getAllSorted().contains(R2));
         assertSize(2);
+        storage.get(R2.getUuid());
     }
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExisting() throws Exception {
-        storage.delete(FAKE.getUuid());
+        storage.delete(FAKE.getUuid());  // UUID_FAKE
     }
 
     @Test

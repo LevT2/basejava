@@ -4,9 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import ru.javawebinar.basejava.storage.impl.ArrayStorage;
 
 @DisplayName("ArrayStorage implementation")
-public class ArrayStorageTest extends AbstractArrayStorageTest {
+public class ArrayStorageTest5 extends AbstractArrayStorageTest5 {
 
-    public ArrayStorageTest() {
+    public ArrayStorageTest5() {
         super(new ArrayStorage());
     }
 }

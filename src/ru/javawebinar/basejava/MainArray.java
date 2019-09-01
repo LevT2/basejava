@@ -1,8 +1,8 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.impl.ArrayStorage;
 import ru.javawebinar.basejava.storage.Storage;
+import ru.javawebinar.basejava.storage.impl.ArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,12 +37,12 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    resume = new Resume(uuid, "Name"+uuid);
+                    resume = new Resume(uuid, "Name" + uuid);
                     ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
                 case "update":
-                    resume = new Resume(uuid, "Name"+uuid);
+                    resume = new Resume(uuid, "Name" + uuid);
                     ARRAY_STORAGE.update(resume);
                     printAll();
                     break;

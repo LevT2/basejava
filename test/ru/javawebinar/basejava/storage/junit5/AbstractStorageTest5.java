@@ -12,10 +12,10 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.javawebinar.basejava.storage.Util.*;
 
-public abstract class AbstractStorageTest {
+public abstract class AbstractStorageTest5 {
     protected Storage storage;
 
-    protected AbstractStorageTest(Storage storage) {
+    protected AbstractStorageTest5(Storage storage) {
         this.storage = storage;
     }
 

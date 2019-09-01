@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ru.javawebinar.basejava.storage.Util.STORAGE_LIMIT;
 
 
-public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
+public abstract class AbstractArrayStorageTest5 extends AbstractStorageTest5 {
 
-    protected AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest5(Storage storage) {
         super(storage);
     }
 

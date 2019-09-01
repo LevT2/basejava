@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**

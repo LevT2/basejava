@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MapResumeStorage extends AbstractStorage {
     private Map<String, Resume> map = new HashMap<>();
@@ -56,6 +55,7 @@ public class MapResumeStorage extends AbstractStorage {
     public List<Resume> doCopyAll() {
         return new ArrayList<>(map.values());
     }
+
     private String getUuid(Object searchKey) {
         return ((Resume) searchKey).getUuid();
     }
